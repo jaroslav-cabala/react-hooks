@@ -5,7 +5,7 @@ import * as React from 'react'
 // eslint-disable-next-line no-unused-vars
 import VanillaTilt from 'vanilla-tilt'
 
-function Tilt({children}) {
+function Tilt({ children }) {
   // 🐨 create a ref here with React.useRef()
 
   // 🐨 add a `React.useEffect` callback here and use VanillaTilt to make your
@@ -28,8 +28,24 @@ function Tilt({children}) {
   // this for a more in depth explanation.
 
   // 🐨 add the `ref` prop to the `tilt-root` div here:
+
+  const tiltRef = React.useRef();
+  React.useEffect(() => {
+    const tiltNode = tiltRef.current
+    VanillaTilt.init(tiltNode, {
+      max: 25,
+      speed: 400,
+      glare: true,
+      'max-glare': 0.5,
+    })
+
+    return () => {
+      tiltNode.VanillaTilt.destroy()
+    }
+  }, [])
+
   return (
-    <div className="tilt-root">
+    <div ref={tiltRef} className="tilt-root">
       <div className="tilt-child">{children}</div>
     </div>
   )
