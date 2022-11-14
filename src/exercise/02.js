@@ -3,31 +3,61 @@
 
 import * as React from 'react'
 
-function Greeting({initialName = ''}) {
-  // 🐨 initialize the state to the value from localStorage
-  // 💰 window.localStorage.getItem('name') ?? initialName
-  const [name, setName] = React.useState(initialName)
+const useLocalStorageState = (key, defaultValue) => {
+  const [data, setData] = React.useState(() => {
+    // const persistedData = window.localStorage.getItem(key)
+    // return persistedData ? JSON.parse(persistedData) : {[key]: defaultValue}
+    return window.localStorage.getItem(key) || defaultValue
+  })
 
-  // 🐨 Here's where you'll use `React.useEffect`.
-  // The callback should set the `name` in localStorage.
-  // 💰 window.localStorage.setItem('name', name)
+  React.useEffect(() => {
+    // window.localStorage.setItem('data', JSON.stringify(data))
+    window.localStorage.setItem(key, data)
+    console.log('useEffect')
+  }, [data, key])
+
+  return {
+    data,
+    // saveItem: (key, value) => {
+    //   const newData = {[key]: value}
+    //   setData(newData)
+    // },
+    setData,
+    clearStorage: () => window.localStorage.clear(),
+  }
+}
+
+function Greeting() {
+  const {data, setData, clearStorage} = useLocalStorageState('name', 'Jaro')
 
   function handleChange(event) {
-    setName(event.target.value)
+    // setData('name', event.target.value)
+    setData(event.target.value)
   }
+
   return (
     <div>
       <form>
         <label htmlFor="name">Name: </label>
-        <input value={name} onChange={handleChange} id="name" />
+        <input value={data} onChange={handleChange} id="name" />
       </form>
-      {name ? <strong>Hello {name}</strong> : 'Please type your name'}
+      {data ? <strong>Hello {data}</strong> : 'Please type your name'}
+      <p>
+        <button onClick={clearStorage}>Clear storage</button>
+      </p>
     </div>
   )
 }
 
 function App() {
-  return <Greeting />
+  const [count, setCount] = React.useState(0)
+
+  return (
+    <>
+      <button onClick={() => setCount(count => count + 1)}>{count}</button>
+      <Greeting />
+    </>
+  )
 }
 
 export default App
