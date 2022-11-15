@@ -5,6 +5,7 @@ import * as React from 'react'
 
 const useLocalStorageState = (key, defaultValue) => {
   const [data, setData] = React.useState(() => {
+    console.log('useState function')
     // const persistedData = window.localStorage.getItem(key)
     // return persistedData ? JSON.parse(persistedData) : {[key]: defaultValue}
     return window.localStorage.getItem(key) || defaultValue
@@ -28,9 +29,11 @@ const useLocalStorageState = (key, defaultValue) => {
 }
 
 function Greeting() {
+  console.log('Greeting')
   const {data, setData, clearStorage} = useLocalStorageState('name', 'Jaro')
 
   function handleChange(event) {
+    console.log('handleChange')
     // setData('name', event.target.value)
     setData(event.target.value)
   }
@@ -43,7 +46,7 @@ function Greeting() {
       </form>
       {data ? <strong>Hello {data}</strong> : 'Please type your name'}
       <p>
-        <button onClick={clearStorage}>Clear storage</button>
+        <button onClick={() => clearStorage}>Clear storage</button>
       </p>
     </div>
   )

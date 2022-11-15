@@ -12,6 +12,7 @@ function useLocalStorageState(
   defaultValue = '',
   {serialize = JSON.stringify, deserialize = JSON.parse} = {},
 ) {
+  console.log('useLocalStorageState hook, key = ', key)
   const [state, setState] = React.useState(() => {
     const valueInLocalStorage = window.localStorage.getItem(key)
     if (valueInLocalStorage) {
@@ -23,6 +24,8 @@ function useLocalStorageState(
   const prevKeyRef = React.useRef(key)
 
   React.useEffect(() => {
+    console.log('useLocalStorageState hook useEffect, key = ', key)
+
     const prevKey = prevKeyRef.current
     if (prevKey !== key) {
       window.localStorage.removeItem(prevKey)
